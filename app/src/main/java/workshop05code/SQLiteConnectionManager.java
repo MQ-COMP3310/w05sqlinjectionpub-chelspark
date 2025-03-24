@@ -66,12 +66,15 @@ public class SQLiteConnectionManager {
         try (Connection conn = DriverManager.getConnection(databaseURL)) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
+                logger.info("Database driver name: " + meta.getDriverName());
+                logger.info("A new database has been created.");
+                // System.out.println("The driver name is " + meta.getDriverName());
+                // System.out.println("A new database has been created.");
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            // System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, "Error while creating a new database", e);
         }
     }
 
@@ -90,7 +93,8 @@ public class SQLiteConnectionManager {
                     return true;
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, "Error while checking if connection is defined", e);
+                // System.out.println(e.getMessage());
                 return false;
             }
         }
@@ -115,7 +119,8 @@ public class SQLiteConnectionManager {
                 return true;
 
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.SEVERE, "Error while creating wordle tables", e);
+                // System.out.println(e.getMessage());
                 return false;
             }
         }
@@ -139,7 +144,8 @@ public class SQLiteConnectionManager {
                 pstmt.setString(2, word); //escapes any dangerous input in word
                 pstmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Error while adding a valid word", e);
+            // System.out.println(e.getMessage());
         }
 
     }
@@ -151,7 +157,7 @@ public class SQLiteConnectionManager {
      * @return true if guess exists in the database, false otherwise
      */
     public boolean isValidWord(String guess) {
-        String sql = "SELECT count(id) as total FROM validWords WHERE word like'" + guess + "';";
+        String sql = "SELECT count(id) as total FROM validWords WHERE word = ?";
 
         try (Connection conn = DriverManager.getConnection(databaseURL);
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -165,7 +171,8 @@ public class SQLiteConnectionManager {
             return false;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Error while checking if a word is valid", e);
+            // System.out.println(e.getMessage());
             return false;
         }
 

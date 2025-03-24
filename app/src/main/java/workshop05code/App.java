@@ -27,7 +27,8 @@ public class App {
             //replace this code with the above line bc it is not working and I changed the location of the file.
             //LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
         } catch (SecurityException | IOException e1) {
-            e1.printStackTrace();
+            System.err.println("Failed to load logging properties file: " + e1.getMessage());
+            // e1.printStackTrace();
         }
     }
 
@@ -64,15 +65,17 @@ public class App {
                 if(line.matches("[a-z]{4}")){
                     wordleDatabaseConnection.addValidWord(i, line);
                     i++;
+                    logger.info("Valid word loaded: " + line);
                 }else {
-                    System.out.println("Ignored invalid word from file: " + line);
-                    // logger.warning("Ignored invalid word from file:" + line);
+                    // System.out.println("Ignored invalid word from file: " + line);
+                    logger.severe("Ignored invalid word from file:" + line);
                 }
                 
             }
 
         } catch (IOException e) {
-            System.out.println("Not able to load . Sorry!");
+            logger.log(Level.SEVERE, "message.", e);
+            System.out.println("Someting went wrong while loading the words from the file. Please try again.");
             System.out.println(e.getMessage());
             return;
         }
@@ -85,6 +88,7 @@ public class App {
 
             while (!guess.equals("q")) {
                 if(!guess.matches("[a-z]{4}")) {
+                    logger.warning("Invalide guess entered by user: " + guess);
                     System.out.println("Invalid input. Please enter a 4 letter word using only lowercase letters.");
                 }else {
                     System.out.println("You've guessed '" + guess+"'.");
@@ -100,7 +104,9 @@ public class App {
                 guess = scanner.nextLine();
             }
         } catch (NoSuchElementException | IllegalStateException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Input error while reading user guess.", e);
+            System.out.println("An unexpected error occurred. Please try again.");
+            // e.printStackTrace();
         }
 
     }
