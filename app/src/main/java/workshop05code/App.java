@@ -3,6 +3,8 @@ package workshop05code;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 //Included for the logging exercise
@@ -21,7 +23,9 @@ public class App {
         // must set before the Logger
         // loads logging.properties from the classpath
         try {// resources\logging.properties
-            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
+            LogManager.getLogManager().readConfiguration(App.class.getClassLoader().getResourceAsStream("logging.properties"));
+            //replace this code with the above line bc it is not working and I changed the location of the file.
+            //LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
         } catch (SecurityException | IOException e1) {
             e1.printStackTrace();
         }
@@ -51,8 +55,9 @@ public class App {
         }
 
         // let's add some words to valid 4 letter words from the data.txt file
-
-        try (BufferedReader br = new BufferedReader(new FileReader("resources/data.txt"))) {
+        InputStream input = App.class.getClassLoader().getResourceAsStream("data.txt");
+        //BufferedReader br = new BufferedReader(new FileReader("resources/data.txt"))
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.io.InputStream;
 
 public class SQLiteConnectionManager {
     //Start code logging exercise
@@ -22,7 +23,8 @@ public class SQLiteConnectionManager {
         // must set before the Logger
         // loads logging.properties from the classpath
         try {// resources\logging.properties
-            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
+            //this line has been fiexed since the location of the file has been changed.
+            LogManager.getLogManager().readConfiguration(SQLiteConnectionManager.class.getClassLoader().getResourceAsStream("logging.properties"));
         } catch (SecurityException | IOException e1) {
             e1.printStackTrace();
         }
