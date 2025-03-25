@@ -23,9 +23,7 @@ public class App {
         // must set before the Logger
         // loads logging.properties from the classpath
         try {// resources\logging.properties
-            LogManager.getLogManager().readConfiguration(App.class.getClassLoader().getResourceAsStream("logging.properties"));
-            //replace this code with the above line bc it is not working and I changed the location of the file.
-            //LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
+            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
         } catch (SecurityException | IOException e1) {
             System.err.println("Failed to load logging properties file: " + e1.getMessage());
             // e1.printStackTrace();
@@ -56,9 +54,7 @@ public class App {
         }
 
         // let's add some words to valid 4 letter words from the data.txt file
-        InputStream input = App.class.getClassLoader().getResourceAsStream("data.txt");
-        //BufferedReader br = new BufferedReader(new FileReader("resources/data.txt"))
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(input))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("resources/data.txt"))) {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {

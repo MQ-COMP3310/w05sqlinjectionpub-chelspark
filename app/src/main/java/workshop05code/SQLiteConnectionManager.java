@@ -24,7 +24,7 @@ public class SQLiteConnectionManager {
         // loads logging.properties from the classpath
         try {// resources\logging.properties
             //this line has been fiexed since the location of the file has been changed.
-            LogManager.getLogManager().readConfiguration(SQLiteConnectionManager.class.getClassLoader().getResourceAsStream("logging.properties"));
+            LogManager.getLogManager().readConfiguration(new FileInputStream("resources/logging.properties"));
         } catch (SecurityException | IOException e1) {
             e1.printStackTrace();
         }
